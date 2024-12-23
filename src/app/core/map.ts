@@ -11,7 +11,7 @@ export class Map {
   map: Array<Array<CellTypes>>;
   algorithm: PathFindingAlgorithm;
 
-  constructor(rows: number, cols: number, speed = 500) {
+  constructor(rows: number, cols: number, speed = 5) {
     this.row = rows;
     this.col = cols;
     this.speed = speed
@@ -23,43 +23,37 @@ export class Map {
     this.algorithm = new Dijkstra();
   }
 
-  updateCell(node: Node, type: CellTypes,): void {
-    if (type === CellTypes.Source) {
-      if (this.source) {
-        this.updateCell(this.source, CellTypes.Empty)
-      }
-      this.source = node;
+  clearCell(node: Node): void {
+    if (this.isValidNode(node)) {
+      this.map[node.r][node.c] = CellTypes.Empty;
     }
-    if (type === CellTypes.Target) {
-      if (this.target) {
-        this.map[this.target.r][this.target.c] = CellTypes.Empty;
-      }
-      this.target = node
+  }
+
+  updateCell(node: Node, type: CellTypes): void {
+    if (type === CellTypes.Source) {
+      this.clearCell(this.source);
+      this.source = node;
+    } else if (type === CellTypes.Target) {
+      this.clearCell(this.target);
+      this.target = node;
     }
     this.map[node.r][node.c] = type;
   }
 
   async find(): Promise<Array<number> | undefined> {
     const graph = this.buildAdjacencyMatrix();
-
-    if (!this.source || !this.target) {
-      console.error('Source or Target is not set.');
-      return;
-    }
-
     const source = this.convert2DToIndex(this.source);
     const target = this.convert2DToIndex(this.target);
-    const cb = (visited: Array<boolean>) => {
-      this.updateVisited(visited, CellTypes.Explored)
+    const cb = async (visited: Array<boolean>) => {
+      await this.updateVisited(visited, CellTypes.Explored)
     }
-    const path = this.algorithm.find_path(graph, source, target, cb);
-    console.info('Source:', source, 'Target:', target, 'Path:', path);
+    const path = await this.algorithm.find_path(graph, source, target, cb);
+    console.info('Path:', path);
 
-    for (let i = 0; i < path.length; i++) {
-      const node = this.convertIndexTo2D(path[i]);
-      this.updateCell(node, CellTypes.Path);
-      await this.delay();
-
+    const pathNodes = path.map(i => this.convertIndexTo2D(i));
+    for (const node of pathNodes) {
+      this.updateCell(node, CellTypes.Path)
+      await this.delay()
     }
     return path;
   }
@@ -82,14 +76,14 @@ export class Map {
     return new Node(r, c)
   }
 
-  private updateVisited(visited: Array<boolean>, type: CellTypes): void {
-    visited.forEach(async (visited, i) => {
-      await this.delay()
-      if (visited) {
-        const node = this.convertIndexTo2D(i);
-        this.updateCell(node, type)
+  private async updateVisited(visited: Array<boolean>, type: CellTypes): Promise<void> {
+    for (let i = 0; i < visited.length; i++) {
+      const node = this.convertIndexTo2D(i);
+      if (visited[i] && this.type(node) !== type) {
+        this.updateCell(node, type);
+        await this.delay();
       }
-    })
+    }
   }
 
   private buildAdjacencyMatrix(): number[][] {
