@@ -1,0 +1,89 @@
+<main class="d-flex vh-100">
+  <!-- Sidebar Section -->
+  <aside class="bg-light p-3 border-end" style="width: 300px;">
+    <h3>Map Configuration</h3>
+    <div class="form-group">
+      <label for="rows">Rows</label>
+      <input
+        [(ngModel)]="dimensions.rows"
+        class="form-control mb-2"
+        id="rows"
+        placeholder="Enter number of rows"
+        aria-label="rows"
+        type="number"
+        min="1">
+
+      <label for="columns">Columns</label>
+      <input
+        [(ngModel)]="dimensions.columns"
+        class="form-control mb-2"
+        id="columns"
+        placeholder="Enter number of columns"
+        aria-label="columns"
+        type="number"
+        min="1">
+
+      <label for="speed">Speed</label>
+      <input
+        [(ngModel)]="dimensions.speed"
+        class="form-control mb-3"
+        id="speed"
+        placeholder="Enter speed (ms)"
+        aria-label="speed"
+        type="number"
+        min="1">
+
+      <div class="d-flex align-items-center mb-3">
+        <label class="me-3">Algorithm</label>
+        <div ngbDropdown class="d-inline-block">
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            id="algorithm"
+            ngbDropdownToggle>
+            {{ 'Dijkstra' }}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem (click)="changeAlgorithm(1)">Dijkstra</button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-outline-dark w-100 mb-3"
+        (click)="updateMap()">Update Map
+      </button>
+
+      <h3>Controls</h3>
+      <div class="d-flex align-items-center mb-3">
+        <label class="me-3">Selecting Mode:</label>
+        <div ngbDropdown class="d-inline-block">
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            id="dropdownBasic1"
+            ngbDropdownToggle>
+            {{ mode }}
+          </button>
+          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+            <button ngbDropdownItem (click)="changeMode(CellTypes.Source)">Source</button>
+            <button ngbDropdownItem (click)="changeMode(CellTypes.Target)">Target</button>
+            <button ngbDropdownItem (click)="changeMode(CellTypes.Empty)">Empty</button>
+            <button ngbDropdownItem (click)="changeMode(CellTypes.Block)">Block</button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-dark w-100"
+        (click)="find()">Find Path
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Map Section -->
+  <section class="flex-grow-1 d-flex justify-content-center align-items-center bg-light">
+    <app-map [map]="map" [mode]="mode"></app-map>
+  </section>
+</main>
+

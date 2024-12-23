@@ -1,0 +1,13 @@
+<div class="map-container overflow-auto bg-light-subtle border border-opacity-25 rounded-2 p-3">
+  @for (row of map.map; let i = $index; track i) {
+    <div class="map-row d-flex">
+      @for (col of row; let j = $index; track j) {
+        <div
+          class="map-cell text-center d-flex align-items-center justify-content-center"
+          (click)="updateNode(i, j)"
+          [class]="cellStyle(col)">
+        </div>
+      }
+    </div>
+  }
+</div>

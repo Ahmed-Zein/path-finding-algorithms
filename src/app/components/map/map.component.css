@@ -1,0 +1,44 @@
+.map-container {
+  margin: 1em;
+  /*max-width: 100%;*/
+  /*max-height: 80vh;*/
+  overflow: auto;
+}
+
+.map-row {
+  display: flex;
+  margin-bottom: 2px;
+}
+
+.map-cell {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  margin-right: 2px;
+  cursor: pointer;
+  background-color: #f8f9fa;
+}
+
+.map-cell.Source {
+  background-color: #dc3545;
+}
+
+.map-cell.Target {
+  background-color: #28a745;
+}
+
+.map-cell.Block {
+  background-color: #131010;
+}
+
+.map-cell.Empty {
+  background-color: #f8f9fa;
+}
+
+.map-cell.Path {
+  background-color: #ff6e3e;
+}
+
+.map-cell.Explored {
+  background-color: #9AA6B2;
+}
