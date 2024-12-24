@@ -24,14 +24,17 @@ export class MainPageComponent {
   dimensions = {rows: 10, columns: 8, speed: 100};
   map = new Map(this.dimensions.rows, this.dimensions.columns, this.dimensions.speed);
   mode = CellTypes.Block;
+  active = true;
   protected readonly CellTypes = CellTypes;
 
   async find() {
+    this.active = false
     await this.map.find();
+    this.active = true
   }
 
   updateMap() {
-    this.map = new Map(this.dimensions.rows, this.dimensions.columns, 100);
+    this.map = new Map(this.dimensions.rows, this.dimensions.columns, this.dimensions.speed);
   }
 
   changeMode(mode: CellTypes) {
@@ -40,6 +43,10 @@ export class MainPageComponent {
 
   changeAlgorithm(number: number) {
     this.map.algorithm = new Dijkstra();
+  }
+
+  onSliderChange() {
+    this.map.speed = this.dimensions.speed
   }
 }
 

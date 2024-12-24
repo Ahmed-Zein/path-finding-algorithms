@@ -3,7 +3,7 @@ import {CellTypes} from './cellTypes';
 import {Node} from './node';
 
 export class Map {
-  speed: number;
+  speed: number
   row: number;
   col: number;
   source: Node;
@@ -23,9 +23,14 @@ export class Map {
     this.algorithm = new Dijkstra();
   }
 
-  clearCell(node: Node): void {
-    if (this.isValidNode(node)) {
-      this.map[node.r][node.c] = CellTypes.Empty;
+  reset() {
+    this.updateCell(this.source, CellTypes.Source)
+    this.updateCell(this.target, CellTypes.Target)
+    for (let i = 0; i < this.row; i++) {
+      for (let j = 0; j < this.col; j++) {
+        if (this.map[i][j] === CellTypes.Source || this.map[i][j] === CellTypes.Target || this.map[i][j] === CellTypes.Block) continue;
+        this.clearCell(new Node(i, j))
+      }
     }
   }
 
@@ -41,16 +46,17 @@ export class Map {
   }
 
   async find(): Promise<Array<number> | undefined> {
+    this.reset()
     const graph = this.buildAdjacencyMatrix();
-    const source = this.convert2DToIndex(this.source);
-    const target = this.convert2DToIndex(this.target);
+    const source = this.convertNodeToIndex(this.source);
+    const target = this.convertNodeToIndex(this.target);
     const cb = async (visited: Array<boolean>) => {
       await this.updateVisited(visited, CellTypes.Explored)
     }
     const path = await this.algorithm.find_path(graph, source, target, cb);
     console.info('Path:', path);
 
-    const pathNodes = path.map(i => this.convertIndexTo2D(i));
+    const pathNodes = path.map(i => this.convertIndexToNode(i));
     for (const node of pathNodes) {
       this.updateCell(node, CellTypes.Path)
       await this.delay()
@@ -58,28 +64,34 @@ export class Map {
     return path;
   }
 
-  delay(): Promise<void> {
+  private delay(): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, this.speed));
   }
 
-  type(node: Node): CellTypes {
+  private getCellType(node: Node): CellTypes {
     return this.map[node.r][node.c];
   }
 
-  convert2DToIndex(node: Node): number {
+  private convertNodeToIndex(node: Node): number {
     return node.r * this.col + node.c
   }
 
-  convertIndexTo2D(i: number): Node {
+  private convertIndexToNode(i: number): Node {
     const r = Math.floor(i / this.col);
     const c = i % this.col;
     return new Node(r, c)
   }
 
+  private clearCell(node: Node): void {
+    if (this.isValidNode(node)) {
+      this.map[node.r][node.c] = CellTypes.Empty;
+    }
+  }
+
   private async updateVisited(visited: Array<boolean>, type: CellTypes): Promise<void> {
     for (let i = 0; i < visited.length; i++) {
-      const node = this.convertIndexTo2D(i);
-      if (visited[i] && this.type(node) !== type) {
+      const node = this.convertIndexToNode(i);
+      if (visited[i] && this.getCellType(node) !== type) {
         this.updateCell(node, type);
         await this.delay();
       }
@@ -93,7 +105,7 @@ export class Map {
     for (let i = 0; i < this.row; i++) {
       for (let j = 0; j < this.col; j++) {
         if (this.map[i][j] === CellTypes.Block) continue;
-        const curr = this.convert2DToIndex(new Node(i, j));
+        const curr = this.convertNodeToIndex(new Node(i, j));
         const leftNode = new Node(i, j - 1);
         const rightNode = new Node(i, j + 1);
         const upperNode = new Node(i - 1, j);
@@ -101,7 +113,7 @@ export class Map {
 
         [leftNode, rightNode, upperNode, bottomNode].forEach((node) => {
             if (this.isValidNode(node)) {
-              graph[curr][this.convert2DToIndex(node)] = 1;
+              graph[curr][this.convertNodeToIndex(node)] = 1;
             }
           }
         )
@@ -111,7 +123,7 @@ export class Map {
   }
 
   private isValidNode(node: Node): boolean {
-    return (node.r >= 0) && (node.r < this.row) && (node.c >= 0) && (node.c < this.col) && (this.type(node) !== CellTypes.Block);
+    return (node.r >= 0) && (node.r < this.row) && (node.c >= 0) && (node.c < this.col) && (this.getCellType(node) !== CellTypes.Block);
   }
 }
 
