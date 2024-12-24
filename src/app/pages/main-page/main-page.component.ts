@@ -5,6 +5,7 @@ import {FormsModule} from '@angular/forms';
 import {MapComponent} from '../../components/map/map.component';
 import {NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle} from '@ng-bootstrap/ng-bootstrap';
 import {Dijkstra} from '../../core/algorithm/dijkstra';
+import {Astar} from '../../core/algorithm/astar';
 
 @Component({
   selector: 'app-main-page',
@@ -21,32 +22,37 @@ import {Dijkstra} from '../../core/algorithm/dijkstra';
   styleUrl: './main-page.component.css'
 })
 export class MainPageComponent {
-  dimensions = {rows: 10, columns: 8, speed: 100};
-  map = new Map(this.dimensions.rows, this.dimensions.columns, this.dimensions.speed);
+  configuration = {rows: 18, columns: 20, speed: 100, Algorithm: 'Dijkstra'};
+  map = new Map(this.configuration.rows, this.configuration.columns, this.configuration.speed);
   mode = CellTypes.Block;
-  active = true;
   protected readonly CellTypes = CellTypes;
 
   async find() {
-    this.active = false
+    this.changeAlgorithm(this.configuration.Algorithm);
     await this.map.find();
-    this.active = true
   }
 
   updateMap() {
-    this.map = new Map(this.dimensions.rows, this.dimensions.columns, this.dimensions.speed);
+    this.map = new Map(this.configuration.rows, this.configuration.columns, this.configuration.speed);
   }
 
   changeMode(mode: CellTypes) {
     this.mode = mode
   }
 
-  changeAlgorithm(number: number) {
-    this.map.algorithm = new Dijkstra();
+  changeAlgorithm(algo: string) {
+    this.configuration.Algorithm = algo
+    switch (algo) {
+      case 'Astar':
+        this.map.algorithm = new Astar(this.map.row, this.map.col);
+        break;
+      default:
+        this.map.algorithm = new Dijkstra();
+    }
   }
 
   onSliderChange() {
-    this.map.speed = this.dimensions.speed
+    this.map.speed = this.configuration.speed
   }
 }
 

@@ -1,6 +1,7 @@
-import {Dijkstra, PathFindingAlgorithm} from "./algorithm/dijkstra";
 import {CellTypes} from './cellTypes';
 import {Node} from './node';
+import {PathFindingAlgorithm} from './algorithm/pathfindingAlgorithm';
+import {Dijkstra} from './algorithm/dijkstra';
 
 export class Map {
   speed: number
@@ -20,7 +21,7 @@ export class Map {
     this.target = new Node(rows - 1, cols - 1)
     this.updateCell(this.source, CellTypes.Source)
     this.updateCell(this.target, CellTypes.Target)
-    this.algorithm = new Dijkstra();
+    this.algorithm = new Dijkstra()
   }
 
   reset() {
@@ -110,8 +111,13 @@ export class Map {
         const rightNode = new Node(i, j + 1);
         const upperNode = new Node(i - 1, j);
         const bottomNode = new Node(i + 1, j);
-
-        [leftNode, rightNode, upperNode, bottomNode].forEach((node) => {
+        // adding diagonals
+        const d1 = new Node(i + 1, j + 1);
+        const d2 = new Node(i + 1, j - 1);
+        const d3 = new Node(i - 1, j + 1);
+        const d4 = new Node(i - 1, j - 1);
+        //
+        [leftNode, rightNode, upperNode, bottomNode, d1, d2, d3, d4].forEach((node) => {
             if (this.isValidNode(node)) {
               graph[curr][this.convertNodeToIndex(node)] = 1;
             }

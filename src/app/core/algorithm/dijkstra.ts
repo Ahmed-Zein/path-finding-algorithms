@@ -1,11 +1,7 @@
-export type Action = (visited: Array<boolean>) => Promise<void>;
+import {Action, PathFindingAlgorithm, PathFindingAlgorithmBase} from './pathfindingAlgorithm';
 
-export interface PathFindingAlgorithm {
-  find_path(graph: Array<Array<number>>, source: number, target: number, callback: Action | null): Promise<Array<number>>;
-}
-
-export class Dijkstra implements PathFindingAlgorithm {
-  async find_path(graph: Array<Array<number>>, source: number, target: number, callback: Action | null): Promise<Array<number>> {
+export class Dijkstra extends PathFindingAlgorithmBase implements PathFindingAlgorithm {
+  public async find_path(graph: Array<Array<number>>, source: number, target: number, callback: Action | null): Promise<Array<number>> {
     const dst: Array<number> = Array(graph.length).fill(Number.MAX_SAFE_INTEGER);
     const precedence: Array<number> = Array(graph.length).fill(-1);
     const visited: Array<boolean> = Array(graph.length).fill(false);
@@ -29,27 +25,5 @@ export class Dijkstra implements PathFindingAlgorithm {
       }
     }
     return this.recover_path(precedence, target);
-  }
-
-  private find_outNode(dst: Array<number>, visited: Array<boolean>): number {
-    let idx = -1, min_cost = Number.MAX_SAFE_INTEGER;
-    dst.forEach((cost, i) => {
-      if (!visited[i] && cost < min_cost) {
-        min_cost = cost;
-        idx = i;
-      }
-    })
-    return idx;
-  }
-
-  private recover_path(dst: Array<number>, target: number): Array<number> {
-    const path: Array<number> = [];
-    let current = target;
-    while (current != -1) {
-      path.push(current);
-      current = dst[current];
-
-    }
-    return path.reverse();
   }
 }

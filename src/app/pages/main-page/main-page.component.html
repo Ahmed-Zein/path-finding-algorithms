@@ -5,7 +5,7 @@
     <div class="form-group">
       <label for="rows">Rows</label>
       <input
-        [(ngModel)]="dimensions.rows"
+        [(ngModel)]="configuration.rows"
         class="form-control mb-2"
         id="rows"
         placeholder="Enter number of rows"
@@ -15,7 +15,7 @@
 
       <label for="columns">Columns</label>
       <input
-        [(ngModel)]="dimensions.columns"
+        [(ngModel)]="configuration.columns"
         class="form-control mb-2"
         id="columns"
         placeholder="Enter number of columns"
@@ -26,7 +26,7 @@
       <label for="speed" class="form-label">Speed</label>
       <input
         type="range"
-        [(ngModel)]="dimensions.speed"
+        [(ngModel)]="configuration.speed"
         class="form-range"
         id="speed"
         min="0"
@@ -39,18 +39,8 @@
         <span>Max: 5s</span>
       </div>
       <div class="my-2">
-        <span>Current Speed: {{ dimensions.speed / 1000 }}s</span>
+        <span>Current Speed: {{ configuration.speed / 1000 }}s</span>
       </div>
-
-      <!--      <input-->
-      <!--        [(ngModel)]="dimensions.speed"-->
-      <!--        class="form-control mb-3"-->
-      <!--        id="speed"-->
-      <!--        placeholder="Enter speed (ms)"-->
-      <!--        aria-label="speed"-->
-      <!--        type="number"-->
-      <!--        min="1">-->
-
       <div class="d-flex align-items-center mb-3">
         <label class="me-3">Algorithm</label>
         <div ngbDropdown class="d-inline-block">
@@ -59,10 +49,11 @@
             class="btn btn-outline-dark"
             id="algorithm"
             ngbDropdownToggle>
-            {{ 'Dijkstra' }}
+            {{configuration.Algorithm}}
           </button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button ngbDropdownItem (click)="changeAlgorithm(1)">Dijkstra</button>
+            <button ngbDropdownItem (click)="changeAlgorithm('Dijkstra')">Dijkstra</button>
+            <button ngbDropdownItem (click)="changeAlgorithm('Astar')">A*</button>
           </div>
         </div>
       </div>
