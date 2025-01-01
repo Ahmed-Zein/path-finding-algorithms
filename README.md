@@ -14,8 +14,8 @@ A Visualized implementation of various path-finding algorithms.
 
 This repository includes implementations of the following algorithms:
 
-- [x]**Dijkstra's Algorithm**
-- [x]**A\* (A-Star) Algorithm**
-- [ ]**Breadth-First Search (BFS)**
-- [ ]**Depth-First Search (DFS)**
-- [ ]**Greedy Best-First Search**
+- [x] **Dijkstra's Algorithm**
+- [x] **A\* (A-Star) Algorithm**
+- [ ] **Breadth-First Search (BFS)**
+- [ ] **Depth-First Search (DFS)**
+- [ ] **Greedy Best-First Search**
