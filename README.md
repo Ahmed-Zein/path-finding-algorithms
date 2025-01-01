@@ -2,8 +2,6 @@
 
 A Visualized implementation of various path-finding algorithms.
 
-## Table of Contents
-
 ## Features
 
 - Implementation of classic path-finding algorithms.
