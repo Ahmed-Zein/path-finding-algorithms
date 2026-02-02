@@ -1,12 +1,14 @@
 # Path-Finding Algorithms
+A visualized implementation of various path-finding algorithms.
 
-A Visualized implementation of various path-finding algorithms.
+**Live Demo:** https://path-finding-algorithms-greybeasts-projects.vercel.app/  
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://path-finding-algorithms-greybeasts-projects.vercel.app/)
 
 ## Features
 
-- Implementation of classic path-finding algorithms.
-- Visual representations.
-- Configurable grid sizes and obstacles.
+- Implementation of classic path-finding algorithms
+- Interactive visual representations
+- Configurable grid sizes and obstacles
 
 ## Implemented Algorithms
 
