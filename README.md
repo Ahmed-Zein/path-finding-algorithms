@@ -1,8 +1,9 @@
 # Path-Finding Algorithms
 A visualized implementation of various path-finding algorithms.
 
-**Live Demo:** https://path-finding-algorithms-greybeasts-projects.vercel.app/  
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://path-finding-algorithms-greybeasts-projects.vercel.app/)
+**Live Demo:** https://path-finding-algorithms-six.vercel.app/ 
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)]([https://path-finding-algorithms-greybeasts-projects.vercel.app/](https://path-finding-algorithms-six.vercel.app/))
 
 ## Features
 
